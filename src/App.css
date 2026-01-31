@@ -1,0 +1,125 @@
+/* =========================================
+   🌙 Unified Dark Theme
+   ========================================= */
+
+:root {
+  --bg-primary: #0b0c10;
+  --bg-card: #1f2833;
+  --text-primary: #c5c6c7;
+  --text-accent: #66fcf1;
+  --text-accent-2: #45a29e;
+  --border-soft: rgba(102, 252, 241, 0.12);
+}
+
+/* Full Screen Page */
+.page-bg {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+/* Header Bar */
+.header-bar {
+  width: 100%;
+  background-color: var(--bg-card);
+  border-bottom: 1px solid var(--border-soft);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+/* Buttons */
+.btn-accent {
+  background: linear-gradient(90deg, var(--text-accent), var(--text-accent-2));
+  color: #0b0c10;
+  padding: 0.6rem 1.2rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  transition: all 0.25s ease;
+}
+.btn-accent:hover {
+  opacity: 0.9;
+  transform: scale(1.02);
+}
+
+.btn-ghost {
+  border: 1px solid var(--text-accent-2);
+  color: var(--text-accent);
+  padding: 0.5rem 1rem;
+  border-radius: 0.75rem;
+  transition: all 0.25s ease;
+  background-color: transparent;
+}
+.btn-ghost:hover {
+  background-color: var(--text-accent-2);
+  color: #0b0c10;
+}
+
+/* Upload & Analysis Cards */
+.upload-card,
+.analysis-card-strong {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-soft);
+  border-radius: 1rem;
+  box-shadow: 0 0 24px rgba(102, 252, 241, 0.05);
+  padding: 2rem;
+  width: 100%;
+  transition: all 0.3s ease;
+}
+.upload-card:hover,
+.analysis-card-strong:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 0 40px rgba(102, 252, 241, 0.1);
+}
+
+/* Typography */
+h1,
+h2,
+h3 {
+  color: var(--text-accent);
+}
+p,
+li,
+span {
+  color: var(--text-primary);
+}
+
+/* Footer */
+footer {
+  background-color: var(--bg-card);
+  border-top: 1px solid var(--border-soft);
+  color: var(--text-primary);
+  text-align: center;
+  padding: 1rem;
+}
+
+/* Animations */
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.05) 50%,
+    rgba(255, 255, 255, 0.1) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.4s linear infinite;
+  border-radius: 0.5rem;
+}
