@@ -18,60 +18,9 @@ const ALLOWED_TYPES = new Set([
 ]);
 
 const isAllowedFile = (file) => file && ALLOWED_TYPES.has(file.type);
-
 const filesizeMB = (bytes) => `${(bytes / 1024 / 1024).toFixed(2)} MB`;
 
-/* ---------- Small Icon Components ---------- */
-const FileIcon = ({ type }) => {
-  if (!type) return <div className="w-10 h-10 rounded-md bg-accent/10" />;
-  if (type.includes("pdf"))
-    return (
-      <div className="w-10 h-10 rounded-md bg-gradient-to-br from-[#FF6B6B] to-[#FFB86B] flex items-center justify-center text-white font-bold">
-        PDF
-      </div>
-    );
-  return (
-    <div className="w-10 h-10 rounded-md bg-accent-2/10 flex items-center justify-center text-accent-2 font-semibold">
-      DOC
-    </div>
-  );
-};
-
-/* ---------- Progress Ring (SVG) ---------- */
-const ProgressRing = ({ size = 64, stroke = 6, progress = 0 }) => {
-  const radius = (size - stroke) / 2;
-  const circumference = 2 * Math.PI * radius;
-  const offset = circumference - (progress / 100) * circumference;
-  return (
-    <svg width={size} height={size} className="block">
-      <g transform={`translate(${size / 2}, ${size / 2})`}>
-        <circle
-          r={radius}
-          fill="transparent"
-          stroke="rgba(255,255,255,0.06)"
-          strokeWidth={stroke}
-        />
-        <circle
-          r={radius}
-          fill="transparent"
-          stroke="url(#grad)"
-          strokeWidth={stroke}
-          strokeLinecap="round"
-          strokeDasharray={`${circumference} ${circumference}`}
-          strokeDashoffset={offset}
-        />
-      </g>
-      <defs>
-        <linearGradient id="grad" x1="0" x2="1">
-          <stop offset="0%" stopColor="#66FCF1" />
-          <stop offset="100%" stopColor="#45A29E" />
-        </linearGradient>
-      </defs>
-    </svg>
-  );
-};
-
-/* ---------- Upload Card (memoized) ---------- */
+/* ---------- Components ---------- */
 const UploadCard = memo(function UploadCard({
   selectedFile,
   isUploading,
@@ -83,417 +32,196 @@ const UploadCard = memo(function UploadCard({
   onCancelUpload,
   onDragHandlers,
 }) {
-  const { handleDragOver, handleDragLeave, handleDrop, isDragging } =
-    onDragHandlers;
+  const { handleDragOver, handleDragLeave, handleDrop, isDragging } = onDragHandlers;
 
   return (
-    <div
-      className={`w-full max-w-2xl relative overflow-hidden rounded-2xl transition-shadow duration-300
-        ${
-          isDragging
-            ? "ring-2 ring-offset-2 ring-accent/40 shadow-2xl"
-            : "shadow-lg"
-        }
-        bg-gradient-to-br from-[rgba(255,255,255,0.02)] to-[rgba(255,255,255,0.01)] border border-[rgba(255,255,255,0.04)]`}
-      onDragOver={handleDragOver}
-      onDragLeave={handleDragLeave}
-      onDrop={handleDrop}
-      role="region"
-      aria-label="Resume upload"
-    >
-      {/* Decorative header */}
-      <div className="p-6 flex items-center justify-between gap-4">
-        <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-lg bg-accent-2/12 flex items-center justify-center">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M12 3v12"
-                stroke="#66FCF1"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M8 7h8"
-                stroke="#66FCF1"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M21 15v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-2"
-                stroke="#66FCF1"
-                strokeWidth="1.2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </div>
-          <div>
-            <h3 className="text-lg font-semibold text-accent">
-              Quick Resume Analysis
-            </h3>
-            <p className="text-sm text-primary/80">
-              Upload your resume to get instant AI insights
-            </p>
-          </div>
-        </div>
+    <div className="w-full max-w-xl mx-auto backdrop-blur-3xl bg-[#0f172a]/40 border border-white/10 rounded-[2rem] p-1 shadow-2xl relative overflow-hidden group">
+      {/* Outer Glow */}
+      <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500/10 rounded-full blur-[80px] pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-600/10 rounded-full blur-[80px] pointer-events-none" />
 
-        <div className="flex items-center gap-3">
-          <label
-            htmlFor="file-input"
-            className="btn-ghost px-3 py-2 rounded-md cursor-pointer text-sm border border-[rgba(255,255,255,0.04)] hover:bg-accent-2/6"
-          >
-            Choose File
-            <input
-              id="file-input"
-              type="file"
-              accept=".pdf,.doc,.docx"
-              onChange={onChooseFile}
-              className="hidden"
-            />
-          </label>
-          <button
-            className="btn-accent px-4 py-2 rounded-md text-sm"
-            onClick={onStartUpload}
-            disabled={!selectedFile || isUploading}
-          >
-            Analyze
-          </button>
-        </div>
+      <div className="relative z-10 p-8 text-center pb-6">
+        <h2 className="text-2xl font-bold text-white mb-1">Instant Analysis</h2>
+        <p className="text-cyan-200/60 text-sm">Upload PDF, DOC, or DOCX</p>
       </div>
 
-      <div className="px-6 pb-6">
-        {/* Main body */}
+      {/* Inner Dark Card */}
+      <div className="bg-[#0B1120] rounded-[1.5rem] p-6 mx-2 mb-2 border border-white/5 relative shadow-inner">
+
+        <div className="mb-6">
+          <h3 className="text-2xl font-bold text-white mb-2 leading-tight">
+            Upload your resume — get <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">actionable AI insights</span>
+          </h3>
+          <p className="text-slate-400 text-sm">Secure, fast, and optimized for ATS. We never share data.</p>
+        </div>
+
+        {/* Action Row */}
+        <div className="flex items-center justify-between bg-slate-800/50 rounded-xl p-3 mb-4 border border-white/5">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-lg bg-cyan-500/10 flex items-center justify-center text-cyan-400">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+            </div>
+            <div className="text-left hidden sm:block">
+              <div className="text-sm font-semibold text-white">Quick Analysis</div>
+              <div className="text-xs text-slate-500">Upload now</div>
+            </div>
+          </div>
+
+          <div className="flex gap-2">
+            <label className="cursor-pointer bg-slate-700 hover:bg-slate-600 text-white px-3 py-2 rounded-lg text-xs font-medium transition-colors">
+              Choose File
+              <input type="file" className="hidden" accept=".pdf,.doc,.docx" onChange={onChooseFile} />
+            </label>
+            <button
+              onClick={onStartUpload}
+              disabled={!selectedFile || isUploading}
+              className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${selectedFile && !isUploading ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-black shadow-[0_0_15px_rgba(6,182,212,0.4)] hover:shadow-[0_0_20px_rgba(6,182,212,0.6)]' : 'bg-slate-800 text-slate-500 cursor-not-allowed'}`}
+            >
+              Analyze
+            </button>
+          </div>
+        </div>
+
+        {/* Drag Drop Area */}
         <div
-          className={`relative rounded-lg p-6 border-2 border-dashed transition-colors duration-200 ${
-            isDragging
-              ? "border-accent/60 bg-[rgba(102,252,241,0.03)]"
-              : "border-[rgba(255,255,255,0.03) bg-[transparent]"
-          }`}
-          onDragOver={(e) => e.preventDefault()}
+          className={`relative rounded-xl border-2 border-dashed transition-all duration-200 h-32 flex flex-col items-center justify-center text-center
+            ${isDragging ? 'border-cyan-500 bg-cyan-500/5' : 'border-slate-700/50 hover:border-slate-600 bg-slate-900/50'}
+          `}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
         >
-          {!selectedFile && !isUploading && (
-            <div className="flex flex-col md:flex-row items-center gap-4 justify-between">
-              <div className="flex items-center gap-4">
-                <div className="w-16 h-16 rounded-lg bg-accent/6 flex items-center justify-center text-accent text-xl">
-                  📄
-                </div>
-                <div>
-                  <p className="text-sm text-primary/80">
-                    Drag & drop your file here
-                  </p>
-                  <p className="text-xs text-primary/60 mt-1">
-                    PDF, DOC, and DOCX accepted • Max 10MB
-                  </p>
-                </div>
-              </div>
-              <div className="mt-4 md:mt-0">
-                <button
-                  className="btn-outline px-4 py-2 rounded-md text-sm"
-                  onClick={() => document.getElementById("file-input")?.click()}
-                >
-                  Browse files
-                </button>
-              </div>
+          {isUploading ? (
+            <div className="flex flex-col items-center">
+              <div className="w-8 h-8 rounded-full border-2 border-slate-700 border-t-cyan-400 animate-spin mb-3"></div>
+              <span className="text-cyan-400 font-bold text-sm">Analyzing... {Math.round(uploadProgress)}%</span>
             </div>
+          ) : selectedFile ? (
+            <div className="flex items-center gap-3 bg-slate-800/80 px-4 py-2 rounded-lg border border-white/5">
+              <div className="w-8 h-8 bg-blue-500/20 rounded text-blue-400 flex items-center justify-center font-bold text-xs">DOC</div>
+              <div className="text-left">
+                <div className="text-white text-sm font-medium">{selectedFile.name}</div>
+                <div className="text-slate-500 text-xs">{filesizeMB(selectedFile.size)}</div>
+              </div>
+              <button onClick={onRemoveFile} className="ml-2 text-slate-500 hover:text-red-400">×</button>
+            </div>
+          ) : (
+            <>
+              <div className="text-slate-500 mb-2">Drag & drop your file here...</div>
+              <div className="text-xs text-slate-600">PDF, DOC and DOCX accepted.</div>
+            </>
           )}
 
-          {selectedFile && !isUploading && (
-            <div className="flex items-center justify-between gap-4">
-              <div className="flex items-center gap-4">
-                <FileIcon type={selectedFile.type} />
-                <div>
-                  <div className="text-sm font-medium text-accent">
-                    {selectedFile.name}
-                  </div>
-                  <div className="text-xs text-primary/70">
-                    {filesizeMB(selectedFile.size)}
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3">
-                <button
-                  className="btn-ghost px-3 py-2 rounded-md text-sm"
-                  onClick={onRemoveFile}
-                >
-                  Change
-                </button>
-                <button
-                  className="btn-accent px-4 py-2 rounded-md text-sm"
-                  onClick={onStartUpload}
-                >
-                  Analyze
-                </button>
-              </div>
-            </div>
-          )}
-
-          {isUploading && (
-            <div className="flex items-center justify-between gap-6">
-              <div className="flex items-center gap-4">
-                <div className="w-20 h-20 flex items-center justify-center">
-                  <ProgressRing
-                    size={72}
-                    stroke={7}
-                    progress={Math.round(uploadProgress)}
-                  />
-                  <div className="absolute text-sm font-semibold text-accent">
-                    {Math.round(uploadProgress)}%
-                  </div>
-                </div>
-
-                <div>
-                  <div className="text-sm font-medium text-accent">
-                    Analyzing resume
-                  </div>
-                  <div className="text-xs text-primary/70">
-                    This may take a few seconds — results are private and
-                    encrypted.
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex flex-col items-end gap-2">
-                <button
-                  className="btn-ghost px-3 py-2 rounded-md text-sm"
-                  onClick={onCancelUpload}
-                >
-                  Cancel
-                </button>
-                <div className="text-xs text-primary/60">
-                  {Math.round(uploadProgress)}% complete
-                </div>
-              </div>
-            </div>
-          )}
-
-          {error && (
-            <div className="mt-4 p-3 rounded-md bg-red-600/6 border border-red-600/20 text-red-500 text-sm">
-              <strong>Error:</strong> {error}
-            </div>
-          )}
+          {error && <div className="absolute bottom-2 text-red-400 text-xs font-medium">{error}</div>}
         </div>
 
-        {/* Footer quick tips */}
-        <div className="mt-4 text-xs text-primary/60 flex items-center justify-between">
-          <div>
-            Tip: Remove personal details like DOB or photo for best ATS results.
-          </div>
-          <div className="hidden md:block">
-            Powered by secure AI · GDPR friendly
-          </div>
+        <div className="mt-4 text-[10px] text-slate-600 text-center">
+          Tip: Remove personal details like DOB for best results. Powered by ResumeAI.
         </div>
       </div>
+
+      {/* Footer Icons */}
+      <div className="flex justify-center gap-6 pb-4">
+        <div className="flex items-center gap-1.5 text-xs text-slate-400">
+          <span className="text-amber-400">🔒</span> Private
+        </div>
+        <div className="flex items-center gap-1.5 text-xs text-slate-400">
+          <span className="text-cyan-400">⚡</span> Fast
+        </div>
+        <div className="flex items-center gap-1.5 text-xs text-slate-400">
+          <span className="text-blue-400">🛡️</span> Secure
+        </div>
+      </div>
+
     </div>
   );
 });
-UploadCard.displayName = "UploadCard";
 
-/* ---------- Main Component ---------- */
+/* ---------- Container Component ---------- */
 const UploadSections = () => {
   const navigate = useNavigate();
-
-  // UI state
+  // State
   const [isDragging, setIsDragging] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [error, setError] = useState(null);
-
-  // refs for rAF and abort
+  // Refs
   const rafRef = useRef(null);
   const progressStartRef = useRef(null);
   const abortRef = useRef(null);
 
-  /* prefer-reduced-motion */
-  const prefersReduced = useMemo(
-    () =>
-      typeof window !== "undefined" &&
-      window.matchMedia &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches,
-    []
-  );
-
-  /* ---------- Smooth progress using rAF ---------- */
+  /* Animation Logic (Same as before) */
   const startSmoothProgress = useCallback(() => {
     progressStartRef.current = performance.now();
     const start = uploadProgress || 0;
-    const duration = 1800; // ms to ease to ~90
-    const target = 90;
-
+    const duration = 2000;
     const tick = (now) => {
       const elapsed = now - progressStartRef.current;
       const t = Math.min(elapsed / duration, 1);
-      const eased = 1 - Math.pow(1 - t, 3); // easeOutCubic
-      const next = start + (target - start) * eased;
+      const next = start + (90 - start) * (1 - Math.pow(1 - t, 3));
       setUploadProgress(next);
-      if (t < 1) {
-        rafRef.current = requestAnimationFrame(tick);
-      } else {
-        setUploadProgress(target);
-        rafRef.current = null;
-      }
+      if (t < 1) rafRef.current = requestAnimationFrame(tick);
     };
-
-    if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    cancelAnimationFrame(rafRef.current);
     rafRef.current = requestAnimationFrame(tick);
   }, [uploadProgress]);
 
-  const stopSmoothProgress = useCallback(() => {
-    if (rafRef.current) {
-      cancelAnimationFrame(rafRef.current);
-      rafRef.current = null;
-    }
-  }, []);
+  const handleHandleChoose = (e) => validateAndSelect(e.target.files?.[0]);
+  const handleDrop = (e) => {
+    e.preventDefault(); setIsDragging(false); validateAndSelect(e.dataTransfer.files?.[0]);
+  };
 
-  /* ---------- File handlers ---------- */
-  const handleChooseFile = useCallback((e) => {
+  const validateAndSelect = (file) => {
     setError(null);
-    const file = e.target.files?.[0];
     if (!file) return;
-    if (!isAllowedFile(file)) {
-      setError("Please upload a PDF, DOC, or DOCX file.");
-      return;
-    }
-    if (file.size > 10 * 1024 * 1024) {
-      setError("File is too large. Max 10MB.");
-      return;
-    }
+    if (!isAllowedFile(file)) return setError("Invalid file type.");
+    if (file.size > 10 * 1024 * 1024) return setError("File too large (Max 10MB).");
     setSelectedFile(file);
-  }, []);
+  };
 
-  const handleRemoveFile = useCallback(() => {
-    setSelectedFile(null);
-    setError(null);
-  }, []);
-
-  /* Drag handlers */
-  const handleDragOver = useCallback((e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(true);
-  }, []);
-  const handleDragLeave = useCallback((e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(false);
-  }, []);
-  const handleDrop = useCallback((e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(false);
-    setError(null);
-    const file = e.dataTransfer.files?.[0];
-    if (!file) return;
-    if (!isAllowedFile(file)) {
-      setError("Please upload a PDF, DOC, or DOCX file.");
-      return;
-    }
-    if (file.size > 10 * 1024 * 1024) {
-      setError("File is too large. Max 10MB.");
-      return;
-    }
-    setSelectedFile(file);
-  }, []);
-
-  /* ---------- Upload logic ---------- */
-  const handleUpload = useCallback(async () => {
+  const onStartUpload = async () => {
     if (!selectedFile) return;
     setIsUploading(true);
-    setError(null);
     setUploadProgress(0);
+    startSmoothProgress();
 
-    // Abort controller
+    // Simulate/Real Upload
     const controller = new AbortController();
     abortRef.current = controller;
 
-    // Start smooth progress unless reduced-motion is on
-    if (!prefersReduced) startSmoothProgress();
-    else setUploadProgress(50);
-
     try {
-      const res = await analyzeResume(selectedFile, {
-        signal: controller.signal,
-      });
-      stopSmoothProgress();
+      const res = await analyzeResume(selectedFile, { signal: controller.signal });
       setUploadProgress(100);
-
       setTimeout(() => {
         setIsUploading(false);
         navigate("/analyze", { state: { analysisData: res } });
-      }, 350);
+      }, 500);
     } catch (err) {
-      stopSmoothProgress();
-      if (err.name === "AbortError") setError("Upload cancelled.");
-      else
-        setError(err?.message || "Failed to upload resume. Please try again.");
+      setError(err.message || "Upload Failed");
       setIsUploading(false);
       setUploadProgress(0);
-    } finally {
-      abortRef.current = null;
     }
-  }, [
-    selectedFile,
-    navigate,
-    prefersReduced,
-    startSmoothProgress,
-    stopSmoothProgress,
-  ]);
-
-  const handleCancelUpload = useCallback(() => {
-    if (abortRef.current) abortRef.current.abort();
-    setIsUploading(false);
-    stopSmoothProgress();
-    setUploadProgress(0);
-  }, [stopSmoothProgress]);
-
-  /* cleanup */
-  useEffect(() => {
-    return () => {
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      if (abortRef.current) abortRef.current.abort();
-    };
-  }, []);
-
-  const dragHandlers = {
-    handleDragOver,
-    handleDragLeave,
-    handleDrop,
-    isDragging,
   };
 
   return (
-    <section className="py-12 px-4 md:px-12 lg:px-0">
-      <div className="mx-auto max-w-7xl">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="mb-8"
-        >
-          <h2 className="text-3xl md:text-4xl font-extrabold text-accent">
-            Upload your resume — get actionable AI insights
-          </h2>
-          <p className="text-primary/80 mt-2 max-w-2xl">
-            Secure, fast, and optimized for ATS. We never share your data.
-          </p>
-        </motion.div>
-
-        <UploadCard
-          selectedFile={selectedFile}
-          isUploading={isUploading}
-          uploadProgress={uploadProgress}
-          error={error}
-          onChooseFile={handleChooseFile}
-          onRemoveFile={handleRemoveFile}
-          onStartUpload={handleUpload}
-          onCancelUpload={handleCancelUpload}
-          onDragHandlers={dragHandlers}
-        />
-      </div>
-    </section>
+    <UploadCard
+      selectedFile={selectedFile}
+      isUploading={isUploading}
+      uploadProgress={uploadProgress}
+      error={error}
+      onChooseFile={handleHandleChoose}
+      onRemoveFile={() => setSelectedFile(null)}
+      onStartUpload={onStartUpload}
+      onCancelUpload={() => { }} // simplified
+      onDragHandlers={{
+        isDragging,
+        handleDragOver: (e) => { e.preventDefault(); setIsDragging(true); },
+        handleDragLeave: (e) => { e.preventDefault(); setIsDragging(false); },
+        handleDrop
+      }}
+    />
   );
 };
 

@@ -1,24 +1,98 @@
 @import "tailwindcss";
 
-/* Keep index.css minimal so Tailwind compiles cleanly and theme stays in App.css */
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
+  font-family: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.6;
   font-weight: 400;
-  color: #3d3d3d;
-  background-color: #f6f6f6;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+
+  /* Deep Professional Navy Theme */
+  --bg-dark: #0F172A;
+  /* Slate 900 */
+  --bg-card: #1E293B;
+  /* Slate 800 */
+  --bg-panel: #334155;
+  /* Slate 700 */
+
+  --text-main: #F8FAFC;
+  /* Slate 50 */
+  --text-muted: #94A3B8;
+  /* Slate 400 */
+
+  /* Accents */
+  --primary: #38BDF8;
+  /* Sky 400 */
+  --primary-glow: rgba(56, 189, 248, 0.15);
+
+  --success: #4ADE80;
+  /* Green 400 */
+  --warning: #FBBF24;
+  /* Amber 400 */
+  --danger: #F87171;
+  /* Red 400 */
+
+  --border: rgba(148, 163, 184, 0.1);
+  --glass: rgba(30, 41, 59, 0.7);
 }
 
 body {
   margin: 0;
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
-  overflow-x: hidden;
-  font-family: "Inter", system-ui, sans-serif;
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  -webkit-font-smoothing: antialiased;
 }
 
-a {
-  text-decoration: none;
+/* Utilities */
+.card-base {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: #0F172A;
+  font-weight: 600;
+  padding: 0.625rem 1.25rem;
+  border-radius: 0.5rem;
+  transition: filter 0.2s;
+}
+
+.btn-primary:hover {
+  filter: brightness(1.1);
+}
+
+.btn-secondary {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-main);
+  padding: 0.625rem 1.25rem;
+  border-radius: 0.5rem;
+  transition: background 0.2s;
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.tab-active {
+  color: var(--primary);
+  border-bottom: 2px solid var(--primary);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-in {
+  animation: fadeIn 0.4s ease-out forwards;
 }
