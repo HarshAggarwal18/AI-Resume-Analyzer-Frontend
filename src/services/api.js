@@ -6,7 +6,7 @@ import axios from "axios";
 // cause servers to reject the request.
 const api = axios.create({
   // baseURL: "http://localhost:8081/api", // Updated Spring Boot API URL
-  baseURL : "https://ai-resume-analyser-7za3.onrender.com/api",
+  baseURL: "https://ai-resume-analyser-7za3.onrender.com/api",
   timeout: 60000, // 60 seconds timeout for file uploads
 });
 
