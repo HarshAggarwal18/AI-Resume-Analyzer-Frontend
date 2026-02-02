@@ -5,10 +5,21 @@ import axios from "axios";
 // set the proper boundary when FormData is used. Setting it manually can
 // cause servers to reject the request.
 const api = axios.create({
-  // baseURL: "http://localhost:8081/api", // Updated Spring Boot API URL
-  baseURL: "https://ai-resume-analyser-7za3.onrender.com/api", //UP
-  timeout: 60000, // 60 seconds timeout for file uploads
+  baseURL: "http://localhost:8081/api", // Updated Spring Boot API URL
+  // baseURL: "https://ai-resume-analyser-7za3.onrender.com/api", //UP
+  timeout: 120000, // 120 seconds timeout (2 mins) as per backend guide
 });
+
+// Function to fetch all jobs
+export const fetchJobs = async () => {
+  try {
+    const response = await api.get("/jobs");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching jobs:", error);
+    throw error;
+  }
+};
 
 // Add interceptors to log request/response details and timing to help
 // diagnose network errors (CORS, connection refused, wrong URL, etc.).
