@@ -5,8 +5,8 @@ import axios from "axios";
 // set the proper boundary when FormData is used. Setting it manually can
 // cause servers to reject the request.
 const api = axios.create({
-  baseURL: "http://localhost:8081/api", // Updated Spring Boot API URL
-  // baseURL: "https://ai-resume-analyser-7za3.onrender.com/api", //UP
+  // baseURL: "http://localhost:8081/api", // Updated Spring Boot API URL
+  baseURL: "https://ai-resume-analyser-7za3.onrender.com/api", //UP
   timeout: 120000, // 120 seconds timeout (2 mins) as per backend guide
 });
 
